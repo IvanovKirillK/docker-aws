@@ -2,7 +2,6 @@ sudo: required
 services:
   - docker
 
-
 before_install:
   - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
 
@@ -20,6 +19,15 @@ after_success:
   - docker push ivanovkirill86/multi-worker
   - docker push ivanovkirill86/multi-server 
 
-
-
-
+deploy:
+  provider: elasticbeanstalk
+  region: eu-west-1
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-eu-west-1-674028981544
+  bucket_path: docker-multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_acces_key:
+    secure: $AWS_SECRET_KEY
